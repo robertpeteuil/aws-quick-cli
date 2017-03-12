@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+# aws-list - lists info for EC2 instances
+#
+#    from: EC2-by-Name Utilities
+#          https://github.com/robertpeteuil/EC2-by-Name
+#
+#  Author: Robert Peteuil   @RobertPeteuil
+# Version: 0.9, 2017-03-12
+
+
+# TURN ON COLOR IF POSSIBLE
+if test -t 1; then            # check if stdout is a terminal
+  ncolors=$(tput colors)    # see if it supports colors
+  if test -n "$ncolors" && test $ncolors -ge 8; then
+    BLUE="\033[1;34m"
+    WHITE="\033[1;37m"
+    GREEN="\033[1;32m"
+    RED="\033[1;31m"
+    YELLOW="\033[1;33m"
+    CYAN="\033[1;36m"
+  fi
+fi
+
+ParamOne=$1
+
+if [ -n "$AWS_DEFAULT_REGION" ]; then
+  OutputAddendum=" in ${BLUE}${AWS_DEFAULT_REGION}${WHITE}"
+fi
+
+if [ "${ParamOne}" = "help" ] || [ "${ParamOne}" = "-h" ]; then
+  echo -e "lists status and information for AWS EC2 instances"
+  echo -e "\nusage: aws-list [OPTIONS]\n"
+  echo -e "\tOPTIONS"
+  echo -e "\t  (none) : list status of all instances"
+  echo -e "\t stopped : list status of stopped instances"
+  echo -e "\t running : list status of running instances"
+  echo
+  exit 0
+elif [ "${ParamOne}" = "" ]; then
+  filters=""
+  OutputText="EC2 Instances"
+elif [ "${ParamOne}" = "offline" ] || [ "${ParamOne}" = "stopped" ]; then
+  filters="--filters Name=instance-state-name,Values=stopped"
+  OutputText="Stopped EC2 Instances"
+elif [ "${ParamOne}" = "online" ] || [ "${ParamOne}" = "running" ]; then
+  filters="--filters Name=instance-state-name,Values=running"
+  OutputText="Running EC2 Instances"
+fi
+
+InstanceId=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[InstanceId]' --output text))
+InstanceImage=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[ImageId]' --output text))
+InstanceStatus=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].State[].[Name]' --output text))
+
+if [ ${#InstanceId[@]} -ne 0 ]; then
+  echo -e "\n${OutputText}${OutputAddendum}:\n"
+  for (( i=0; i<"${#InstanceId[@]}"; i=i+1 )); do
+    InstanceName=$(aws ec2 describe-instances --instance-ids "${InstanceId[$i]}" --query 'Reservations[*].Instances[].Tags[].[Value,Key]' --output text)
+    InstanceName=$(echo $InstanceName | awk '/Name/ {print $1}')
+    InstanceInfo=($(aws ec2 describe-images --image-ids ${InstanceImage[$i]} --query 'Images[*].{Name:Name}' --output text))
+    case ${InstanceStatus[$i]} in
+      running)  CLRstatus=${GREEN} ;;
+      stopped)  CLRstatus=${RED} ;;
+      stopping)  CLRstatus=${YELLOW} ;;
+      pending)  CLRstatus=${YELLOW} ;;
+      starting)  CLRstatus=${YELLOW} ;;
+      *)  CLRstatus=${WHITE} ;;
+    esac
+    echo -e "\t${WHITE}Name: ${CYAN}${InstanceName}${WHITE}     ID: ${CYAN}${InstanceId[$i]}${WHITE}     Status: ${CLRstatus}${InstanceStatus[$i]}"
+    echo -e "\t${WHITE}AMI: ${CYAN}${InstanceImage[$i]}${WHITE}     ${WHITE}AMI Name: ${CYAN}${InstanceInfo}${WHITE}\n"
+  done
+else
+  echo -e "${RED}No ${OutputText} found${WHITE}"
+fi
+
+exit 0

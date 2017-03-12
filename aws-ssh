@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# aws-ssh - login to EC2 instance by name
+#
+#    from: EC2-by-Name Utilities
+#          https://github.com/robertpeteuil/EC2-by-Name
+#
+#  Author: Robert Peteuil   @RobertPeteuil
+# Version: 0.9, 2017-03-12
+
+
+if [ -z "$1" ] || [ "$1" = "-h" ]; then
+  echo -e "connects to the specified AWS EC2 instance via ssh"
+  echo -e "\nusage: aws-ssh 'instance-name' [login-name]"
+  echo
+  echo -e "   instance-name : name assigned to the EC2 instance (REQUIRED)"
+  echo -e "      login-name : name to use in the ssh command (optional)"
+  exit 0
+fi
+
+InstanceName="$1"
+
+InstanceInfo=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=$InstanceName" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[KeyName,PublicDnsName]' --output text))
+InstanceKey=${InstanceInfo[0]}
+InstanceAddy=${InstanceInfo[1]}
+
+if [ -z "$2" ]; then
+  case $InstanceName in
+    Ubuntu*) loginuser="ubuntu" ;;
+    Debian*) loginuser="admin" ;;
+    Febora*) loginuser="fedora" ;;
+    Centos*) loginuser="centos" ;;
+    OpenBSD) loginuser="root" ;;
+    *) loginuser="ec2-user" ;;
+  esac
+else
+  loginuser="$2"
+fi
+
+if [ -n "$InstanceAddy" ]; then
+  ssh -i "${HOME}/.aws/${InstanceKey}.pem" "${loginuser}@${InstanceAddy}"
+  exit 0
+else
+  echo -e "Instance not found - possibly offline?"
+  exit 1
+fi
