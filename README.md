@@ -20,17 +20,17 @@ Using the AWS CLI commands is cumbersome for developers and users who perform si
 
 These utilities have been tested on Linux and macOS.  They are written in Bash and utilize the AWS CLI Interface commands.  This requires installation of the AWS CLI - https://aws.amazon.com/cli/
 
-These utilities may work on Windows 10 within Bash on Windows, but this has not yet been tested.  Information on getting the AWS CLI installed into Bash on Windows is discussed here: https://github.com/aws/aws-cli/issues/1323
+These utilities have not been tested with Bash on Windows in Windows 10. They should work, provided AWS-CLI is properly installed into Bash on Windows.  This is discussed here: https://github.com/aws/aws-cli/issues/1323
 
 #### Installation:
 
-Install and configue AWS-CLI, and place its configuration file and `.pem` file in the `~/.aws/` directory
-Source the AWS-CLI configuration file from the `.bashrc` or `.bash_profile` files
-Place the scripts in the PATH (like `/usr/local/bin`) or reference them directly (such as: `./aws-list`).
+- Install and configue AWS-CLI, and place its configuration file and `.pem` file in the `~/.aws/` directory
+- Source the AWS-CLI configuration file from the `.bashrc` or `.bash_profile` files
+- Place the scripts in a directory in the PATH (like `/usr/local/bin`) or reference them directly (such as: `./aws-list`).
 
 #### Future Enhancements:
-- option to ssh with allowed certficates, but withour PEM file
+- option to ssh without requiring PEM file by using allowed ssh certs
 - option to select instance via any tag & any value
-- 'quiet mode' with no output for use by other scripts
-- additional utility to allow 'setting' or 'changing' instance names and other tags
-- enhance error checking and error handling  
+- 'quiet mode' with no output (for use by other scripts)
+- allow 'setting' or 'changing' instance names and other tags
+- enhance error checking and error handling 
