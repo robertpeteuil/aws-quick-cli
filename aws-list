@@ -49,7 +49,7 @@ elif [ "${ParamOne}" = "online" ] || [ "${ParamOne}" = "running" ]; then
 fi
 
 InstanceId=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[InstanceId]' --output text))
-InstanceImage=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[ImageId]' --output text))
+ImageAMI=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[ImageId]' --output text))
 InstanceStatus=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].State[].[Name]' --output text))
 
 if [ ${#InstanceId[@]} -ne 0 ]; then
@@ -57,7 +57,7 @@ if [ ${#InstanceId[@]} -ne 0 ]; then
   for (( i=0; i<"${#InstanceId[@]}"; i=i+1 )); do
     InstanceName=$(aws ec2 describe-instances --instance-ids "${InstanceId[$i]}" --query 'Reservations[*].Instances[].Tags[].[Value,Key]' --output text)
     InstanceName=$(echo $InstanceName | awk '/Name/ {print $1}')
-    InstanceInfo=($(aws ec2 describe-images --image-ids ${InstanceImage[$i]} --query 'Images[*].{Name:Name}' --output text))
+    ImageDescription=($(aws ec2 describe-images --image-ids ${ImageAMI[$i]} --query 'Images[*].{Name:Name}' --output text))
     case ${InstanceStatus[$i]} in
       running)  CLRstatus=${GREEN} ;;
       stopped)  CLRstatus=${RED} ;;
@@ -67,7 +67,7 @@ if [ ${#InstanceId[@]} -ne 0 ]; then
       *)  CLRstatus=${WHITE} ;;
     esac
     echo -e "\t${WHITE}Name: ${CYAN}${InstanceName}${WHITE}     ID: ${CYAN}${InstanceId[$i]}${WHITE}     Status: ${CLRstatus}${InstanceStatus[$i]}"
-    echo -e "\t${WHITE}AMI: ${CYAN}${InstanceImage[$i]}${WHITE}     ${WHITE}AMI Name: ${CYAN}${InstanceInfo}${WHITE}\n"
+    echo -e "\t${WHITE}AMI: ${CYAN}${ImageAMI[$i]}${WHITE}     ${WHITE}AMI Name: ${CYAN}${ImageDescription}${WHITE}\n"
   done
 else
   echo -e "${RED}No ${OutputText} found${WHITE}"

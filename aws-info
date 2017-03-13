@@ -29,8 +29,7 @@ if [ -z "$1" ] || [ "$1" = "-h" ]; then
   echo -e "One of these must be specified:"
   echo -e "   instance-name : name assigned to the EC2 instance"
   echo -e "   -i InstanceId : InstanceId of the EC2 instance"
-
-  exit 0
+  exit 0 
 elif [ "$1" = "-i" ]; then
   InstanceId="$2"
   InstanceName=$(aws ec2 describe-instances --instance-ids "${InstanceId}" --query 'Reservations[*].Instances[].Tags[].[Value]' --output text)
@@ -41,9 +40,9 @@ fi
 
 InstanceStatus=$(aws ec2 describe-instances --instance-ids "${InstanceId}" --query 'Reservations[*].Instances[].State[].[Name]' --output text)
 
-InstanceImage=($(aws ec2 describe-instances --instance-ids "${InstanceId}" --query 'Reservations[*].Instances[].[ImageId]' --output text))
+ImageAMI=($(aws ec2 describe-instances --instance-ids "${InstanceId}" --query 'Reservations[*].Instances[].[ImageId]' --output text))
 
-InstanceInfo=($(aws ec2 describe-images --image-ids ${InstanceImage} --query 'Images[*].{Name:Name}' --output text))
+ImageDescription=($(aws ec2 describe-images --image-ids ${ImageAMI} --query 'Images[*].{Name:Name}' --output text))
 
 case ${InstanceStatus} in
   running)  CLRstatus=${GREEN} ;;
@@ -57,6 +56,6 @@ esac
 echo
 echo -e "\t${WHITE}Name: ${CYAN}${InstanceName}${WHITE}     ID: ${CYAN}${InstanceId}${WHITE}     Status: ${CLRstatus}${InstanceStatus}"
 
-echo -e "\t${WHITE}AMI: ${CYAN}${InstanceImage}${WHITE}     ${WHITE}AMI Name: ${CYAN}${InstanceInfo}${WHITE}\n"
+echo -e "\t${WHITE}AMI: ${CYAN}${ImageAMI}${WHITE}     ${WHITE}AMI Name: ${CYAN}${ImageDescription}${WHITE}\n"
 
 exit 0
