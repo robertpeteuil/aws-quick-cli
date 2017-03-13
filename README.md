@@ -14,6 +14,13 @@ The functions are named for the action they perform.  Some utilities have very b
 
 Currently, there are five utilities: **aws-ssh**, **aws-list**, **aws-info**, **aws-start**, and **aws-stop** - each performing the action in their name.  These utilities and syntax options are described below.  Additionally, each utility has built in help that can be accessed with `-h`.
 
+**aws-ssh** - connect (vis ssh) to a referenced instance. The default syntax for this utility is very simple, but it has several optional parameters.
+
+> `aws-ssh NAME` - connect via ssh to the instance tagged NAME
+> `aws-ssh NAME -u LOGINUSER` - use LOGINUSER in the ssh command
+> `aws-ssh NAME -n` - *No PEM key Mode*  For users who have appended their id-rsa.pub key to authorized_keys on the remote host
+> `aws-ssh NAME -d` - *debug mode* - allows troubleshooting connection problems by displaying calculated values within the utility
+
 **aws-list** - lists instances and displays basic information for each including: Name, InstanceId, Status (Running/Stopped), AMI-ID, and AMI-Name.  There are three ways to run this utility.
 
 > `aws-list` - list all instances    
@@ -32,16 +39,6 @@ Currently, there are five utilities: **aws-ssh**, **aws-list**, **aws-info**, **
 **aws-stop** - stops the instance specified.  Like *aws-start* there is only one syntax for this utility.
 
 > `aws-stop NAME` - stops the instance tagged NAME
-
-**aws-ssh** - connect (vis ssh) to a referenced instance. The default syntax for this utility is very simple, but it has several optional parameters.
-
-> `aws-ssh NAME` - connect via ssh to the instance tagged NAME
->
-> `aws-ssh NAME -u LOGINUSER` - use LOGINUSER in the ssh command
->
-> `aws-ssh NAME -n` - *No PEM key Mode*  For users who have appended their id-rsa.pub key to authorized_keys on the remote host
->
-> `aws-ssh NAME -d` - *debug mode* - allows troubleshooting connection problems by displaying calculated values within the utility
 
 #### Compatibility:
 
