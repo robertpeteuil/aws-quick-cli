@@ -1,0 +1,12 @@
+# Repo Specific Ignores #
+#########################
+
+# Holds Personal Info #
+#######################
+*private
+.private
+*.private
+
+# Holds Dev Notes #
+###################
+zref-*
