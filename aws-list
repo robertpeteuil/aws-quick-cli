@@ -2,11 +2,11 @@
 
 # aws-list - lists info for EC2 instances
 #
-#    from: EC2-by-Name Utilities
-#          https://github.com/robertpeteuil/EC2-by-Name
+#    from: Easy-EC2 Utilities
+#          https://github.com/robertpeteuil/Easy-EC2
 #
 #  Author: Robert Peteuil   @RobertPeteuil
-# Version: 0.9, 2017-03-12
+# Version: 0.9.1, 2017-03-13
 
 
 # TURN ON COLOR IF POSSIBLE
