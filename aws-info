@@ -37,7 +37,7 @@ if test -t 1; then            # check if stdout is a terminal
     CLRheading=${bold}${green}
     CLRheading2=${bold}${blue}
     CLRtitle=${bold}${cyan}
-    CLRtitle2=${bold}${magenta}
+    CLRtitle2=${bold}${yellow}
     CLRsuccess=${bold}${green}
     CLRwarning=${bold}${yellow}
     CLRerror=${bold}${red}
