@@ -19,10 +19,10 @@ fi
 
 InstanceName="$1"
 
-InstanceId=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[InstanceId]' --output text)
+InstanceId=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[InstanceId]' --output text))
 
 if [ -n "$InstanceId" ]; then
-  aws ec2 stop-instances --instance-ids $InstanceId --output text
+  aws ec2 stop-instances --instance-ids "$InstanceId" --output text
 else
   echo -e "Instance: ${InstanceName} not found runnning - possibly already offline?"
   exit 1
