@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="0.9.2"
-scriptbuilddate="2017-03-13"
+scriptbuildnum="0.9.3"
+scriptbuilddate="2017-03-20"
 
 ############################################################
 ###     PRE-EXECUTION
@@ -18,7 +18,7 @@ scriptbuilddate="2017-03-13"
 # TURN ON COLOR IF POSSIBLE, SET THEME
 if test -t 1; then            # check if stdout is a terminal
   ncolors=$(tput colors)    # see if it supports colors
-  if test -n "$ncolors" && test $ncolors -ge 8; then
+  if test -n "$ncolors" && test "$ncolors" -ge 8; then
   # Set Colors
     bold="$(tput bold)"
     underline="$(tput smul)"
@@ -65,9 +65,12 @@ display_help_text() {
   echo
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}[OPTIONS]\n"
   echo -e "${CLRtitle}OPTIONS:${CLRnormal}"
-  echo -e "${CLRtitle2} (none)\t${CLRnormal}: list status of all instances"
-  echo -e "${CLRtitle2}stopped\t${CLRnormal}: list status of stopped instances"
-  echo -e "${CLRtitle2}running\t${CLRnormal}: list status of running instances"
+  echo -e "${CLRtitle2} (none)\t${CLRnormal}: list all instances"
+  echo -e "${CLRtitle2}stopped\t${CLRnormal}: list stopped instances"
+  echo -e "${CLRtitle2}running\t${CLRnormal}: list running instances"
+  echo -e "${CLRtitle2}     -d\t${CLRnormal}: debug mode"
+  echo -e "${CLRtitle2}     -V\t${CLRnormal}: display version info"
+  echo -e "${CLRtitle2}     -h\t${CLRnormal}: display help info"
   echo
   exit 0
 }
@@ -99,7 +102,7 @@ for arg in "$@"; do
 done
 
 # Get all instance data items
-InstanceData=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[InstanceId,ImageId,State.Name,Tags[?Key==`Name`].Value]' --output text))
+InstanceData=($(aws ec2 describe-instances "${filters}" --query 'Reservations[*].Instances[].[InstanceId,ImageId,State.Name,Tags[?Key==`Name`].Value]' --output text))
 
 numberDataRecords=4
 numberInstances=$(( ${#InstanceData[@]} / numberDataRecords ))
@@ -109,7 +112,7 @@ numberInstances=$(( ${#InstanceData[@]} / numberDataRecords ))
 if [ ${#InstanceData[@]} -ne 0 ]; then
   echo -e "\n${OutputText}${OutputAddendum}:\n"
 
-  for (( j=0; j<${#InstanceData[@]}; j=j+$numberDataRecords )); do
+  for (( j=0; j<${#InstanceData[@]}; j=j+numberDataRecords )); do
 
     InstanceId=${InstanceData[$j]}
     ImageAMI=${InstanceData[$j+1]}
@@ -126,9 +129,8 @@ if [ ${#InstanceData[@]} -ne 0 ]; then
       starting)   CLRstatus=${CLRwarning} ;;
       *)          CLRstatus=${CLRnormal} ;;
     esac
-    echo -e "\t${CLRnormal}Name: ${CLRtitle}${InstanceName}${CLRnormal}     ID: ${CLRtitle}${InstanceId}${CLRnormal}     Status: ${CLRstatus}${InstanceStatus}"
-    echo -e "\t${CLRnormal}AMI: ${CLRtitle}${ImageAMI}${CLRnormal}     ${CLRnormal}AMI Name: ${CLRtitle}${ImageDescription}${CLRnormal}\n"
-
+    echo -e "\t${CLRnormal}Name: ${CLRtitle}${InstanceName}${CLRnormal}\t\tID: ${CLRtitle}${InstanceId}${CLRnormal}\t\tStatus: ${CLRstatus}${InstanceStatus}"
+    echo -e "\t${CLRnormal}AMI: ${CLRtitle}${ImageAMI}${CLRnormal}\t${CLRnormal}AMI Name: ${CLRtitle}${ImageDescription[0]}${CLRnormal}\n"
   done
 
 else
