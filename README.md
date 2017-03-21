@@ -1,12 +1,11 @@
 # AWS quick CLI
-
 ### Easily Control and ssh to AWS Instances using their Name
-
 [![Code Climate](https://codeclimate.com/github/robertpeteuil/aws-quick-cli/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/robertpeteuil/aws-quick-cli)
 [![GitHub issues](https://img.shields.io/github/issues/robertpeteuil/aws-quick-cli.svg)](https://github.com/robertpeteuil/aws-quick-cli)
 [![version: master](https://img.shields.io/github/tag/robertpeteuil/aws-quick-cli.svg?label=stable+version&colorB=1c64bf&style=flat "stable version")](https://github.com/robertpeteuil/aws-quick-cli/commits/master)
 [![language: bash](https://img.shields.io/badge/language-bash-447799.svg?colorB=1c64bf&style=flat "made in Bash")]()
 [![license](https://img.shields.io/github/license/robertpeteuil/aws-quick-cli.svg?colorB=1c64bf)](https://github.com/robertpeteuil/aws-quick-cli)
+
 ---
 
 These utilities allow you to easily manage and use EC2 instances using only their name.  It includes utilities for listing, connecting (via ssh), starting, and stopping instances.  
