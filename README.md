@@ -11,7 +11,7 @@
 These utilities allow you to easily manage and use EC2 instances using only their name.  It includes utilities for listing, connecting (via ssh), starting, and stopping instances.  
 
 ### Screenshot of aws-list:
-![aws-list-new-size](https://cloud.githubusercontent.com/assets/1554603/24119697/63ef3652-0d6f-11e7-965d-0ae6fe0f5c73.png)
+![aws-list](https://cloud.githubusercontent.com/assets/1554603/24174034/db095af6-0e4b-11e7-8e66-fdfa1d8eecae.png)
 
 ### Utility Details:
 
