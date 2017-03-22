@@ -1,0 +1,14 @@
+---
+engines:
+  shellcheck:
+    enabled: true
+    # turn off client side expansion warning, as we explicitly want it
+    checks:
+      SC2029:
+        enabled: false
+      SC2016:
+        enabled: false
+ratings:
+  paths:
+  - "aws-*"
+exclude_paths: []

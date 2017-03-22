@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-ssh"
-scriptbuildnum="0.9.2"
-scriptbuilddate="2017-03-13"
+scriptbuildnum="0.9.3"
+scriptbuilddate="2017-03-20"
 
 ############################################################
 ###     PRE-EXECUTION
@@ -18,7 +18,7 @@ scriptbuilddate="2017-03-13"
 # TURN ON COLOR IF POSSIBLE, SET THEME
 if test -t 1; then            # check if stdout is a terminal
   ncolors=$(tput colors)    # see if it supports colors
-  if test -n "$ncolors" && test $ncolors -ge 8; then
+  if test -n "$ncolors" && test "$ncolors" -ge 8; then
   # Set Colors
     bold="$(tput bold)"
     underline="$(tput smul)"
@@ -59,8 +59,8 @@ display_help_text() {
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-n] [-u login-user] [-d] [-V] [-h]${CLRnormal}\n"
   echo -e "${CLRtitle}\tOPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2} instance-name\t${CLRnormal}: (REQUIRED) name tag assigned to the EC2 instance"
-  echo -e "${CLRtitle2}            -n\t${CLRnormal}: Don't use PEM key while connecting ${CLRsuccess}*${CLRnormal}"
   echo -e "${CLRtitle2} -u login-user\t${CLRnormal}: (optional) manually specify a login-username for ssh"
+  echo -e "${CLRtitle2}            -n\t${CLRnormal}: Don't use PEM key while connecting ${CLRsuccess}*${CLRnormal}"
   echo -e "${CLRtitle2}            -d\t${CLRnormal}: debug mode"
   echo -e "${CLRtitle2}            -V\t${CLRnormal}: display version info"
   echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
@@ -74,7 +74,7 @@ DetermineLoginUser() {
   # Calculate the LoginUsername by determining the image running on the instance
 
   # Get AMI-ID for Instance Specified by Name
-  ImageAMI=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" --query 'Reservations[*].Instances[].[ImageId]' --output text)
+  ImageAMI=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" --query 'Reservations[*].Instances[].[ImageId]' --output text))
   # Get AMI description for AMI-ID which contains image type info
   ImageDescription=$(aws ec2 describe-images --image-ids "${ImageAMI}" --query 'Images[*].{Name:Name}' --output text)
   case $ImageDescription in
@@ -124,7 +124,7 @@ if [ -z "$InstanceAddy" ]; then
   exit 1
 fi
 
-if [ -z $UserLoginName ]; then
+if [ -z "$UserLoginName" ]; then
   DetermineLoginUser
 else
   [[ "$debugmode" ]] && echo -e "LoginUser set by user: ${CLRtitle}$UserLoginName${CLRnormal}\n"
@@ -134,7 +134,7 @@ fi
 if [[ "$nopem" ]]; then
   [[ ! "$debugmode" ]] && echo -e "${CLRheading2}No PEM mode${CLRnormal} - connecting without PEM key\n"
   [[ "$debugmode" ]] && echo -e "${CLRheading2}No PEM mode${CLRnormal}  Connect string: ${CLRtitle}ssh ${LoginUser}@${InstanceAddy}${CLRnormal}\n"
-  ssh ${LoginUser}@${InstanceAddy}
+  ssh "${LoginUser}@${InstanceAddy}"
   exit 0
 else
   [[ "$debugmode" ]] && echo -e "Connect string: ${CLRtitle}ssh -i ${HOME}/.aws/${InstanceKey}.pem ${LoginUser}@${InstanceAddy}${CLRnormal}\n"
