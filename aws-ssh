@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-ssh"
-scriptbuildnum="0.9.3"
-scriptbuilddate="2017-03-20"
+scriptbuildnum="0.9.4"
+scriptbuilddate="2017-03-23"
 
 ############################################################
 ###     PRE-EXECUTION
@@ -21,10 +21,6 @@ if test -t 1; then            # check if stdout is a terminal
   if test -n "$ncolors" && test "$ncolors" -ge 8; then
   # Set Colors
     bold="$(tput bold)"
-    underline="$(tput smul)"
-    standout="$(tput smso)"
-    normal="$(tput sgr0)"
-    black="$(tput setaf 0)"
     red="$(tput setaf 1)"
     green="$(tput setaf 2)"
     yellow="$(tput setaf 3)"
