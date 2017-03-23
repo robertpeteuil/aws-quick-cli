@@ -51,16 +51,16 @@ The utilities are executed by typing in thir name follower by the instance-name 
 - Linux
 - macOS (OS X)
 
-### Beta Platforms:
-
-- Windows 10 with "Bash on Windows"
-  - Requires installation of make with the command `sudo apt install make`
-  - Requires AWS-CLI installed into "Bash on Windows" (not the Windows OS itself)
-  - Check here for information on the [installation of AWS-CLI on Bash on Windows](https://github.com/aws/aws-cli/issues/1323)
-
 ### Dependancies:
 
 These utilities require the AWS CLI utilities installed and configured.  Check here for more information on [AWS-CLI](https://aws.amazon.com/cli/)
+
+### Windows 10 - Bash on Windows - Pre-Installation Steps:
+
+- Install AWS-CLI into "Bash on Windows" (not the Windows OS itself)
+  - Check here for information on the [installation of AWS-CLI on Bash on Windows](https://github.com/aws/aws-cli/issues/1323)
+- Install **make** utility with the command `sudo apt install make`
+- Allow write access to /usr/local/bin with the command `sudo chmod a+w /usr/local/bin`
 
 ### Installation:
 
