@@ -66,7 +66,7 @@ These utilities require the AWS CLI utilities installed and configured.  Check h
 Can be install with curl
 
 ```shell
-sh -c "`curl -s -L https://raw.github.com/robertpeteuil/aws-quick-cli/master/install.sh`"
+bash -c "`curl -s -L https://raw.github.com/robertpeteuil/aws-quick-cli/master/install.sh`"
 ```
 
 
