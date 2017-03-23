@@ -19,7 +19,7 @@ curl -sL "$PKGDLURL" | tar zxf -
 
 # find the name of the dir extracted to, as it has the last commit # as a suffix
 UTILTMPDIR=$(ls -d -t ${REPOACCT}-${REPONAME}* | head -n 1)
-UTILTMPDIR=${UTILTMPDIR//\/}
+UTILTMPDIR=${UTILTMPDIR//\//}
 
 # switch to extraction dir, install, then remove extraction dir & files
 cd "${UTILTMPDIR}" || exit 1
