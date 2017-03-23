@@ -54,6 +54,7 @@ The utilities are executed by typing in thir name follower by the instance-name 
 ### Beta Platforms:
 
 - Windows 10 with "Bash on Windows"
+  - Requires installation of make with the command `sudo apt install make`
   - Requires AWS-CLI installed into "Bash on Windows" (not the Windows OS itself)
   - Check here for information on the [installation of AWS-CLI on Bash on Windows](https://github.com/aws/aws-cli/issues/1323)
 
