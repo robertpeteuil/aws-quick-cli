@@ -67,6 +67,7 @@ ${CMDPREFIX} cp -f utils/aws-list "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-ssh "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-start "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-stop "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-quick-cli-init.sh "${BINDIR}"
 
 if [[ "${CLEANUPREQ}" ]]; then
   cleanupDownload
