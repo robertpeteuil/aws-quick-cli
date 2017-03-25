@@ -9,39 +9,14 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="0.9.4"
-scriptbuilddate="2017-03-23"
+scriptbuildnum="0.9.5"
+scriptbuilddate="2017-03-25"
+
+# source aws-quick-cli init files to add color and display_ver function
+. aws-quick-cli-init.sh
 
 ############################################################
-###     PRE-EXECUTION
-
-# TURN ON COLOR IF POSSIBLE, SET THEME
-if test -t 1; then            # check if stdout is a terminal
-  ncolors=$(tput colors)    # see if it supports colors
-  if test -n "$ncolors" && test "$ncolors" -ge 8; then
-  # Set Colors
-    bold="$(tput bold)"
-    red="$(tput setaf 1)"
-    green="$(tput setaf 2)"
-    yellow="$(tput setaf 3)"
-    blue="$(tput setaf 4)"
-    magenta="$(tput setaf 5)"
-    cyan="$(tput setaf 6)"
-    white="$(tput setaf 7)"
-  # Set Color Theme - used by echo statements
-    CLRnormal=${bold}${white}
-    CLRheading=${bold}${green}
-    CLRheading2=${bold}${blue}
-    CLRtitle=${bold}${cyan}
-    CLRtitle2=${bold}${yellow}
-    CLRsuccess=${bold}${green}
-    CLRwarning=${bold}${yellow}
-    CLRerror=${bold}${red}
-  fi
-fi
-
-############################################################
-### VAR INITS
+###   VAR INITS
 
 if [ -n "$AWS_DEFAULT_REGION" ]; then
   OutputAddendum=" in ${CLRheading2}${AWS_DEFAULT_REGION}${CLRnormal}"
@@ -49,10 +24,6 @@ fi
 
 ############################################################
 ###   FUNCTIONS
-
-display_ver() {
-  echo -e "${CLRheading}${scriptname}${CLRnormal}  ver ${CLRtitle}${scriptbuildnum} ${CLRnormal}- ${CLRtitle}${scriptbuilddate}${CLRnormal}"
-}
 
 display_help_text() {
   display_ver
@@ -98,7 +69,7 @@ for arg in "$@"; do
 done
 
 # Get all instance data items
-InstanceData=($(aws ec2 describe-instances "${filters}" --query 'Reservations[*].Instances[].[InstanceId,ImageId,State.Name,Tags[?Key==`Name`].Value]' --output text))
+InstanceData=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[InstanceId,ImageId,State.Name,Tags[?Key==`Name`].Value]' --output text))
 
 numberDataRecords=4
 numberInstances=$(( ${#InstanceData[@]} / numberDataRecords ))
