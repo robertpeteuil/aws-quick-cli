@@ -8,8 +8,11 @@ engines:
         enabled: false
       SC2016:
         enabled: false
+      SC2086:
+        enabled: false
 ratings:
   paths:
   - "utils/aws-*"
 exclude_paths:
   - "install.sh"
+  - "utils/aws-quick-cli-init.sh"
