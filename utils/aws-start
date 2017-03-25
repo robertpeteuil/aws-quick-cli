@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# aws-start - start EC2 instance by name
+#
+#    from: aws-quick-cli
+#          https://github.com/robertpeteuil/aws-quick-cli
+#
+#  Author: Robert Peteuil   @RobertPeteuil
+#
+
+scriptname="aws-start"
+scriptbuildnum="0.9.5"
+scriptbuilddate="2017-03-25"
+
+# source aws-quick-cli init files to add color and display_ver function
+. aws-quick-cli-init.sh
+
+if [ -z "$1" ] || [ "$1" = "-h" ]; then
+  display_ver
+  echo
+  echo -e "${CLRtitle}STARTS the specified AWS EC2 instance"
+  echo
+  echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-V] [-h]${CLRnormal}"
+  echo
+  echo -e "${CLRtitle}\tOPTIONS:${CLRnormal}"
+  echo -e "${CLRtitle2} instance-name\t${CLRnormal}: (REQUIRED) name tag assigned to the EC2 instance"
+  echo -e "${CLRtitle2}            -V\t${CLRnormal}: display version info"
+  echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
+  exit 0
+elif [ "$1" = "-V" ]; then
+  display_ver
+  exit 0
+fi
+
+InstanceName="$1"
+
+InstanceId=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=stopped" --query 'Reservations[*].Instances[].[InstanceId]' --output text))
+
+if [ -n "$InstanceId" ]; then
+  aws ec2 start-instances --instance-ids "$InstanceId" --output text
+else
+  echo -e "${CLRwarning}Instance: ${InstanceName} not found stopped${CLRnormal} - possibly already started?"
+  exit 1
+fi
+
+exit 0
