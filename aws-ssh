@@ -2,8 +2,8 @@
 
 # aws-ssh - login to EC2 instance by name
 #
-#    from: Easy-EC2 Utilities
-#          https://github.com/robertpeteuil/Easy-EC2
+#    from: aws-quick-cli
+#          https://github.com/robertpeteuil/aws-quick-cli
 #
 #  Author: Robert Peteuil   @RobertPeteuil
 #
