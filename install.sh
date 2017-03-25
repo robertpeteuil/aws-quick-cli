@@ -62,11 +62,11 @@ fi
 
 # install
 mkdir -p "${BINDIR}"
-${CMDPREFIX} cp -f aws-info "${BINDIR}"
-${CMDPREFIX} cp -f aws-list "${BINDIR}"
-${CMDPREFIX} cp -f aws-ssh "${BINDIR}"
-${CMDPREFIX} cp -f aws-start "${BINDIR}"
-${CMDPREFIX} cp -f aws-stop "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-info "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-list "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-ssh "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-start "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-stop "${BINDIR}"
 
 if [[ "${CLEANUPREQ}" ]]; then
   cleanupDownload

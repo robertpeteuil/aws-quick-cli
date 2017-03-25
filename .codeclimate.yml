@@ -10,5 +10,6 @@ engines:
         enabled: false
 ratings:
   paths:
-  - "aws-*"
-exclude_paths: []
+  - "utils/aws-*"
+exclude_paths:
+  - "install.sh"
