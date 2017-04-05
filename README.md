@@ -55,8 +55,8 @@ The utilities are executed by typing in thir name follower by the instance-name 
 ### Aws-Quick-CLI Utilities Installation:
 
 Dependancies
-- These utilities require the AWS CLI utilities.
-- If they are not installed, please refer to the installation instructions at the bottom of this README.
+- These utilities require the AWS CLI utilities pre-installed on the system.
+- If the AWS-CLI utilities are not installed, please install them first per the instructions at the bottom of this README.
 - Check here for more information on [AWS-CLI](https://aws.amazon.com/cli/)
 
 The utilities in the repo can be installed with curl
@@ -72,7 +72,7 @@ $ cd aws-quick-cli
 $ ./install.sh
 ```
 
-### Reference - Installation of AWS-CLI (if necessary)
+### Reference - Installation of AWS-CLI 
 
 Note for Windows 10 - Bash on Windows users: 
 - Installation requires the `unzip` command, which may not be installed on your system
