@@ -50,6 +50,7 @@ The utilities are executed by typing in thir name follower by the instance-name 
 
 - Linux
 - macOS (OS X)
+- Windows 10 (Bash on Windows)
 
 ### Dependancies:
 
