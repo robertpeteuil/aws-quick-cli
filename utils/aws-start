@@ -9,30 +9,41 @@
 #
 
 scriptname="aws-start"
-scriptbuildnum="0.9.5"
-scriptbuilddate="2017-03-25"
+scriptbuildnum="0.9.5.1"
+scriptbuilddate="2017-04-10"
 
 # source aws-quick-cli init files to add color and display_ver function
 . aws-quick-cli-init.sh
 
-if [ -z "$1" ] || [ "$1" = "-h" ]; then
+display_help_text() {
   display_ver
   echo
   echo -e "${CLRtitle}STARTS the specified AWS EC2 instance"
   echo
-  echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-V] [-h]${CLRnormal}"
+  echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-v] [-h]${CLRnormal}"
   echo
   echo -e "${CLRtitle}\tOPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2} instance-name\t${CLRnormal}: (REQUIRED) name tag assigned to the EC2 instance"
-  echo -e "${CLRtitle2}            -V\t${CLRnormal}: display version info"
+  echo -e "${CLRtitle2}            -v\t${CLRnormal}: display version info"
   echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
   exit 0
-elif [ "$1" = "-V" ]; then
-  display_ver
-  exit 0
-fi
+}
+
+[[ "$1" == "-h" ]] && display_help_text
+[[ "$1" == "-v" ]] && display_ver && exit
+[[ ${1:0:1} == "-" ]] && echo -e "${CLRerror}Error:${CLRnormal} Instance Name not specified\n" && display_help_text
 
 InstanceName="$1"
+
+shift
+
+# Parse COMMAND-TAIL Arguments
+# for arg in "$@"; do
+#   case "$arg" in
+#     -h)         display_help_text ;;
+#     -v)         display_ver; exit ;;
+#   esac
+# done
 
 InstanceId=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=stopped" --query 'Reservations[*].Instances[].[InstanceId]' --output text))
 
