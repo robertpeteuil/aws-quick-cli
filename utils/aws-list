@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="0.9.5.2"
+scriptbuildnum="0.9.5.3"
 scriptbuilddate="2017-04-10"
 
 # source aws-quick-cli init files to add color and display_ver function
@@ -33,16 +33,18 @@ fi
 display_help_text() {
   display_ver
   echo
-  echo -e "${CLRtitle}lists status and information for AWS EC2 instances"
+  echo -e "${CLRtitle}list status and information for AWS EC2 instances"
   echo
-  echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}[OPTIONS]\n"
-  echo -e "${CLRtitle}OPTIONS:${CLRnormal}"
-  echo -e "${CLRtitle2} (none)\t${CLRnormal}: list all instances"
-  echo -e "${CLRtitle2}     -s\t${CLRnormal}: list stopped instances"
-  echo -e "${CLRtitle2}     -r\t${CLRnormal}: list running instances"
-  echo -e "${CLRtitle2}     -d\t${CLRnormal}: debug mode"
-  echo -e "${CLRtitle2}     -v\t${CLRnormal}: display version info"
-  echo -e "${CLRtitle2}     -h\t${CLRnormal}: display help info"
+  echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}(none)${CLRnormal}|${CLRtitle2} instance-name ${CLRnormal}| ${CLRtitle2}-s ${CLRnormal}|${CLRtitle2} -r ${CLRnormal} [OPTIONS]\n"
+  echo -e "${CLRtitle}SELECT LIST TYPE:${CLRnormal}"
+  echo -e "${CLRtitle2}       (none)\t${CLRnormal}: list all instances"
+  echo -e "${CLRtitle2}instance-name\t${CLRnormal}: info for a specific instance"
+  echo -e "${CLRtitle2}           -s\t${CLRnormal}: list stopped instances"
+  echo -e "${CLRtitle2}           -r\t${CLRnormal}: list running instances"
+  echo -e "${CLRtitle}\t OPTIONS:${CLRnormal}"
+  echo -e "${CLRtitle2}           -d\t${CLRnormal}: debug mode"
+  echo -e "${CLRtitle2}           -v\t${CLRnormal}: display version info"
+  echo -e "${CLRtitle2}           -h\t${CLRnormal}: display help info"
   echo
   exit 0
 }
@@ -52,20 +54,34 @@ display_help_text() {
 
 if [ "$1" = "" ]; then
   filters=""
-  OutputText="EC2 Instances"
+  OutputText="All Instances"
+elif [[ ${1:0:1} != "-" ]]; then
+  InstanceName="$1"
+  # echo "Name = $InstanceName"
+  filters="--filters Name=tag:Name,Values=${InstanceName}"
+  OutputText="Specific Instance '${InstanceName}'"
+  shift
+elif [ "$1" = "-s" ]; then
+  filters="--filters Name=instance-state-name,Values=stopped"
+  OutputText="Stopped EC2 Instances"
+  shift
+elif [ "$1" = "-r" ]; then
+  filters="--filters Name=instance-state-name,Values=running"
+  OutputText="Running EC2 Instances"
+  shift
 fi
 
-# Parse COMMAND-TAIL Arguments
+# Parse OPTIONS 
 for arg in "$@"; do
   case "$arg" in
-    -s)
-          filters="--filters Name=instance-state-name,Values=stopped"
-          OutputText="Stopped EC2 Instances"
-          shift ;;
-    -r)
-          filters="--filters Name=instance-state-name,Values=running"
-          OutputText="Running EC2 Instances"
-          shift ;;
+    # -s)
+    #       filters="--filters Name=instance-state-name,Values=stopped"
+    #       OutputText="Stopped EC2 Instances"
+    #       shift ;;
+    # -r)
+    #       filters="--filters Name=instance-state-name,Values=running"
+    #       OutputText="Running EC2 Instances"
+    #       shift ;;
     -h)   display_help_text ;;
     -v)   display_ver; exit ;;
     -d)   debugmode=true; shift ;;
