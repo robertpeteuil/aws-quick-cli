@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="0.9.5"
-scriptbuilddate="2017-03-25"
+scriptbuildnum="0.9.5.1"
+scriptbuilddate="2017-04-10"
 
 # source aws-quick-cli init files to add color and display_ver function
 . aws-quick-cli-init.sh
@@ -33,10 +33,10 @@ display_help_text() {
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}[OPTIONS]\n"
   echo -e "${CLRtitle}OPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2} (none)\t${CLRnormal}: list all instances"
-  echo -e "${CLRtitle2}stopped\t${CLRnormal}: list stopped instances"
-  echo -e "${CLRtitle2}running\t${CLRnormal}: list running instances"
+  echo -e "${CLRtitle2}     -s\t${CLRnormal}: list stopped instances"
+  echo -e "${CLRtitle2}     -r\t${CLRnormal}: list running instances"
   echo -e "${CLRtitle2}     -d\t${CLRnormal}: debug mode"
-  echo -e "${CLRtitle2}     -V\t${CLRnormal}: display version info"
+  echo -e "${CLRtitle2}     -v\t${CLRnormal}: display version info"
   echo -e "${CLRtitle2}     -h\t${CLRnormal}: display help info"
   echo
   exit 0
@@ -53,18 +53,18 @@ fi
 # Parse COMMAND-TAIL Arguments
 for arg in "$@"; do
   case "$arg" in
-    offline|stopped)
+    -s)
           filters="--filters Name=instance-state-name,Values=stopped"
           OutputText="Stopped EC2 Instances"
           shift ;;
-    online|running)
+    -r)
           filters="--filters Name=instance-state-name,Values=running"
           OutputText="Running EC2 Instances"
           shift ;;
-    -h|--help)          display_help_text; exit ;;
-    -V|--version)       display_ver; exit ;;
-    -d|--debug)         debugmode=true; shift ;;
-    *)                  echo -e "invalid paramter\n";display_help_text; exit 1;;
+    -h)   display_help_text ;;
+    -v)   display_ver; exit ;;
+    -d)   debugmode=true; shift ;;
+    *)    echo -e "invalid paramter\n"; display_help_text ;;
   esac
 done
 
