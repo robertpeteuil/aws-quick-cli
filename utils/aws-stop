@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-stop"
-scriptbuildnum="0.9.5.2"
+scriptbuildnum="0.9.5.3"
 scriptbuilddate="2017-04-10"
 
 # source aws-quick-cli init files to add color and display_ver function
@@ -19,6 +19,9 @@ else
   echo "Error - required init files not found"
   exit 1
 fi
+
+############################################################
+###   FUNCTIONS
 
 display_help_text() {
   display_ver
@@ -33,6 +36,9 @@ display_help_text() {
   echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
   exit 0
 }
+
+######################################################################
+###   EXECUTION STARTS HERE
 
 [[ "$1" == "-h" ]] && display_help_text
 [[ "$1" == "-v" ]] && display_ver && exit
