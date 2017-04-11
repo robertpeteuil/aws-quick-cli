@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-start"
-scriptbuildnum="0.9.5.5"
+scriptbuildnum="0.9.5.6"
 scriptbuilddate="2017-04-10"
 
 # source aws-quick-cli init files to add color and display_ver function
@@ -20,13 +20,21 @@ else
   exit 1
 fi
 
+# VARS FOR AWS-START
+InstanceStateValue="stopped"
+HelpTextVerb="STARTS"
+selectionVerb="start"
+ec2Command="start-instances"
+warningMessage1="stopped"
+warningMessage2="started"
+
 ############################################################
 ###   FUNCTIONS
 
 display_help_text() {
   display_ver
   echo
-  echo -e "${CLRtitle}STARTS the specified AWS EC2 instance"
+  echo -e "${CLRtitle}${HelpTextVerb} the specified AWS EC2 instance"
   echo
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-v] [-h]${CLRnormal}"
   echo
@@ -47,7 +55,7 @@ display_help_text() {
 InstanceName="$1"
 shift
 
-InstanceData=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=stopped" --query 'Reservations[*].Instances[].[InstanceId,ImageId,Tags[?Key==`Name`].Value]' --output text))
+InstanceData=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=${InstanceStateValue}" --query 'Reservations[*].Instances[].[InstanceId,ImageId,Tags[?Key==`Name`].Value]' --output text))
 numberDataRecords=3
 
 numInstancesFound=${#InstanceData[@]}
@@ -67,14 +75,13 @@ if (( numInstancesFound > 1 )); then
     echo
   done
   while [[ ! $selectionValid ]]; do
-    echo -en "Enter ${CLRwarning}#${CLRnormal} of instance to start (1-$numInstancesFound): "
+    echo -en "Enter ${CLRwarning}#${CLRnormal} of instance to ${selectionVerb} (1-$numInstancesFound): "
     read -r -n 1 SELECTION
     if [[ $SELECTION =~ ^[1-$numInstancesFound]$ ]]; then
-      # echo -e "\n\tinput is valid and was: $SELECTION"
       echo -e "\n"
       selectionValid=true
     else
-      echo -e "\n${CLRerror}Invalid entry:${CLRnormal} Enter a number between 1 and $numInstancesFound.\n"
+      echo -e "\n${CLRerror}Invalid entry:${CLRnormal} enter a number between 1 and $numInstancesFound.\n"
     fi
   done
 else  # only one instance matches query - set default values
@@ -83,9 +90,9 @@ else  # only one instance matches query - set default values
 fi
 
 if [ -n "${InstanceId[$SELECTION]}" ]; then
-  aws ec2 start-instances --instance-ids "${InstanceId[$SELECTION]}" --output text
+  aws ec2 ${ec2Command} --instance-ids "${InstanceId[$SELECTION]}" --output text
 else
-  echo -e "${CLRwarning}Instance: ${InstanceName} not found stopped${CLRnormal} - possibly already started?"
+  echo -e "${CLRwarning}Instance: ${InstanceName} not found ${warningMessage1}${CLRnormal} - possibly already ${warningMessage2}?"
   exit 1
 fi
 
