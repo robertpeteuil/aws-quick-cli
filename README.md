@@ -2,8 +2,8 @@
 ### Easily Control and ssh to AWS Instances using their Name
 [![Code Climate](https://codeclimate.com/github/robertpeteuil/aws-quick-cli/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/robertpeteuil/aws-quick-cli)
 [![GitHub issues](https://img.shields.io/github/issues/robertpeteuil/aws-quick-cli.svg)](https://github.com/robertpeteuil/aws-quick-cli)
-[![version: master](https://img.shields.io/github/tag/robertpeteuil/aws-quick-cli.svg?label=stable+version&colorB=1c64bf&style=flat "stable version")](https://github.com/robertpeteuil/aws-quick-cli/commits/master)
-[![language: bash](https://img.shields.io/badge/language-bash-447799.svg?colorB=1c64bf&style=flat "made in Bash")]()
+[![GitHub release](https://img.shields.io/github/release/robertpeteuil/aws-quick-cli.svg?colorB=1c64bf)](https://github.com/robertpeteuil/aws-quick-cli)
+[![lang](https://img.shields.io/badge/language-bash-89e051.svg?style=flat-square)]()
 [![license](https://img.shields.io/github/license/robertpeteuil/aws-quick-cli.svg?colorB=1c64bf)](https://github.com/robertpeteuil/aws-quick-cli)
 
 ---
@@ -50,30 +50,67 @@ The utilities are executed by typing in thir name follower by the instance-name 
 
 - Linux
 - macOS (OS X)
+- Windows 10 'Bash on Windows' environment
 
-### Dependancies:
+### Aws-Quick-CLI Utilities Installation:
 
-These utilities require the AWS CLI utilities installed and configured.  Check here for more information on [AWS-CLI](https://aws.amazon.com/cli/)
+Dependancies
+- These utilities require the AWS CLI utilities pre-installed on the system.
+- If the AWS-CLI utilities are not installed, please install them first per the instructions at the bottom of this README.
+- Check here for more information on [AWS-CLI](https://aws.amazon.com/cli/)
 
-### Windows 10 - Bash on Windows - Pre-Installation Steps:
-
-- Install AWS-CLI into "Bash on Windows" (not the Windows OS itself)
-  - Check here for information on the [installation of AWS-CLI on Bash on Windows](https://github.com/aws/aws-cli/issues/1323)
-- Install **make** utility with the command `sudo apt install make`
-- Allow write access to /usr/local/bin with the command `sudo chmod a+w /usr/local/bin`
-
-### Installation:
-
-Can be install with curl
+The utilities in the repo can be installed with curl
 
 ```shell
-bash -c "`curl -s -L https://raw.github.com/robertpeteuil/aws-quick-cli/master/install.sh`"
+$ bash -c "`curl -s -L https://raw.github.com/robertpeteuil/aws-quick-cli/master/install.sh`"
 ```
 
-
-Alternatively, if the repo has been downloaded locally it can be installed with make
+If the repo has been downloaded locally, cd into the directory and run install.sh
 
 ```shell
-cd aws-quick-cli
-make install
+$ cd aws-quick-cli
+$ ./install.sh
 ```
+
+### Reference - Installation of AWS-CLI 
+
+Note for Windows 10 - Bash on Windows users: 
+- Installation requires the `unzip` command, which may not be installed on your system
+- If necessary, you can install it by typing `sudo apt install unzip` 
+
+If you have `sudo` capabilties install the AWS-CLI with the following commands:
+
+```shell
+$ cd ~
+$ mkdir tmpawsinstall
+$ cd tmpawsinstall
+$ curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+$ unzip awscli-bundle.zip
+$ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+$ cd ..
+$ rm -rf tmpawsinstall
+```
+
+If you don't have `sudo` privledges install the AWS-CLI with the following commands:
+
+```shell
+$ cd ~
+$ mkdir tmpawsinstall
+$ cd tmpawsinstall
+$ curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+$ unzip awscli-bundle.zip
+$ ./awscli-bundle/install -b ~/bin/aws
+$ cd ..
+$ rm -rf tmpawsinstall
+```
+
+Note: the non-sudo installation requires that you add the `~/bin` directory to your PATH via your shell profile (either ~/.profile, ~/.bash_profile or ~/.bash_rc depending on your OS.)
+
+Configure the AWS CLI utilities using your AWS Access Key ID # and AWS Secret Access Key and the command:
+
+```shell
+$ aws configure
+```
+
+Check here for more information on [configuring the AWS-CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration)
+
