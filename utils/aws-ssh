@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-ssh"
-scriptbuildnum="0.9.5.5"
+scriptbuildnum="1.0.0"
 scriptbuilddate="2017-04-11"
 
 # source aws-quick-cli init files to add color and display_ver function

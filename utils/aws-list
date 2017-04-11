@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="0.9.5.4"
-scriptbuilddate="2017-04-10"
+scriptbuildnum="1.0.0"
+scriptbuilddate="2017-04-11"
 
 # source aws-quick-cli init files to add color and display_ver function
 if [[ -e "aws-quick-cli-init.sh" ]]; then
@@ -83,8 +83,8 @@ done
 
 # Get all instance data items
 InstanceData=($(aws ec2 describe-instances ${filters} --query 'Reservations[*].Instances[].[InstanceId,ImageId,State.Name,Tags[?Key==`Name`].Value]' --output text))
-
 numberDataRecords=4
+
 numberInstances=$(( ${#InstanceData[@]} / numberDataRecords ))
 
 [[ "$debugmode" ]] && echo -e "# instances found: $numberInstances \t total items collected: ${#InstanceData[@]}\t items per instance: $numberDataRecords\t "

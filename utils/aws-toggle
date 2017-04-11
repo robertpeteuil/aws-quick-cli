@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-toggle"
-scriptbuildnum="0.9.5.7"
-scriptbuilddate="2017-04-10"
+scriptbuildnum="1.0.0"
+scriptbuilddate="2017-04-11"
 
 # source aws-quick-cli init files to add color and display_ver function
 if [[ -e "aws-quick-cli-init.sh" ]]; then
