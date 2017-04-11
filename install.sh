@@ -62,12 +62,12 @@ fi
 
 # install
 mkdir -p "${BINDIR}"
-${CMDPREFIX} cp -f utils/aws-info "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-list "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-quick-cli-init.sh "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-ssh "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-start "${BINDIR}"
 ${CMDPREFIX} cp -f utils/aws-stop "${BINDIR}"
-${CMDPREFIX} cp -f utils/aws-quick-cli-init.sh "${BINDIR}"
+${CMDPREFIX} cp -f utils/aws-toggle "${BINDIR}"
 
 if [[ "${CLEANUPREQ}" ]]; then
   cleanupDownload
