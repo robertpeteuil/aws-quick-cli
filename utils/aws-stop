@@ -45,16 +45,7 @@ display_help_text() {
 [[ ${1:0:1} == "-" ]] && echo -e "${CLRerror}Error:${CLRnormal} Instance Name not specified\n" && display_help_text
 
 InstanceName="$1"
-
 shift
-
-# Parse COMMAND-TAIL Arguments
-# for arg in "$@"; do
-#   case "$arg" in
-#     -h)         display_help_text ;;
-#     -v)         display_ver; exit ;;
-#   esac
-# done
 
 InstanceId=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[InstanceId]' --output text))
 
