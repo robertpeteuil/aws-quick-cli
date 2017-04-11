@@ -9,37 +9,12 @@
 #
 
 scriptname="aws-stop"
-scriptbuildnum="0.9.5"
-scriptbuilddate="2017-03-25"
 
-# source aws-quick-cli init files to add color and display_ver function
-. aws-quick-cli-init.sh
-
-if [ -z "$1" ] || [ "$1" = "-h" ]; then
-  display_ver
-  echo
-  echo -e "${CLRtitle}STOPS the specified AWS EC2 instance"
-  echo
-  echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-V] [-h]${CLRnormal}"
-  echo
-  echo -e "${CLRtitle}\tOPTIONS:${CLRnormal}"
-  echo -e "${CLRtitle2} instance-name\t${CLRnormal}: (REQUIRED) name tag assigned to the EC2 instance"
-  echo -e "${CLRtitle2}            -V\t${CLRnormal}: display version info"
-  echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
-  exit 0
-elif [ "$1" = "-V" ]; then
-  display_ver
-  exit 0
-fi
-
-InstanceName="$1"
-
-InstanceId=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[InstanceId]' --output text))
-
-if [ -n "$InstanceId" ]; then
-  aws ec2 stop-instances --instance-ids "$InstanceId" --output text
+# call aws-toggle utility with start action
+if [[ $(which aws-toggle) ]]; then
+  aws-toggle stop "$@"
 else
-  echo -e "${CLRwarning}Instance: ${InstanceName} not found runnning${CLRnormal} - possibly already offline?"
+  echo "Error - required utility (aws-toggle) not found"
   exit 1
 fi
 
