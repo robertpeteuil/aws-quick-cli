@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="0.9.5.3"
+scriptbuildnum="0.9.5.4"
 scriptbuilddate="2017-04-10"
 
 # source aws-quick-cli init files to add color and display_ver function
@@ -52,36 +52,28 @@ display_help_text() {
 ######################################################################
 ###   EXECUTION STARTS HERE
 
-if [ "$1" = "" ]; then
+# Parse List-Type
+if [[ "$1" == "" ]]; then
   filters=""
   OutputText="All Instances"
 elif [[ ${1:0:1} != "-" ]]; then
   InstanceName="$1"
-  # echo "Name = $InstanceName"
   filters="--filters Name=tag:Name,Values=${InstanceName}"
-  OutputText="Specific Instance '${InstanceName}'"
+  OutputText="Instances '${InstanceName}'"
   shift
-elif [ "$1" = "-s" ]; then
+elif [[ "$1" == "-s" ]]; then
   filters="--filters Name=instance-state-name,Values=stopped"
   OutputText="Stopped EC2 Instances"
   shift
-elif [ "$1" = "-r" ]; then
+elif [[ "$1" == "-r" ]]; then
   filters="--filters Name=instance-state-name,Values=running"
   OutputText="Running EC2 Instances"
   shift
 fi
 
-# Parse OPTIONS 
+# Parse OPTIONS
 for arg in "$@"; do
   case "$arg" in
-    # -s)
-    #       filters="--filters Name=instance-state-name,Values=stopped"
-    #       OutputText="Stopped EC2 Instances"
-    #       shift ;;
-    # -r)
-    #       filters="--filters Name=instance-state-name,Values=running"
-    #       OutputText="Running EC2 Instances"
-    #       shift ;;
     -h)   display_help_text ;;
     -v)   display_ver; exit ;;
     -d)   debugmode=true; shift ;;
