@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-ssh"
-scriptbuildnum="0.9.5.2"
-scriptbuilddate="2017-04-10"
+scriptbuildnum="0.9.5.5"
+scriptbuilddate="2017-04-11"
 
 # source aws-quick-cli init files to add color and display_ver function
 if [[ -e "aws-quick-cli-init.sh" ]]; then
@@ -43,21 +43,22 @@ display_help_text() {
 }
 
 DetermineLoginUser() {
-  # Calculate the LoginUsername by determining the image running on the instance
-
-  # Get AMI-ID for Instance Specified by Name
-  ImageAMI=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=${InstanceName}" --query 'Reservations[*].Instances[].[ImageId]' --output text))
   # Get AMI description for AMI-ID which contains image type info
-  ImageDescription=$(aws ec2 describe-images --image-ids "${ImageAMI}" --query 'Images[*].{Name:Name}' --output text)
-  case $ImageDescription in
-    ubuntu*)  LoginUser="ubuntu"; HostType="Ubuntu" ;;
+  if [[ -z "${ImageDescription[$SELECTION]}" ]]; then
+    selectedImageDescription=$(aws ec2 describe-images --image-ids "${ImageAMI[$SELECTION]}" --query 'Images[*].{Name:Name}' --output text)
+  else
+    selectedImageDescription=${ImageDescription[$SELECTION]}
+  fi
+  # Determine login user using the AMI-description
+  case $selectedImageDescription in
+    ubuntu*)  LoginUser="ubuntu";   HostType="Ubuntu" ;;
     suse*)    LoginUser="ec2-user"; HostType="SUSE" ;;
     amzn*)    LoginUser="ec2-user"; HostType="amzn" ;;
     RHEL*)    LoginUser="ec2-user"; HostType="RHEL" ;;
-    debian*)  LoginUser="admin"; HostType="Debian" ;;
-    febora*)  LoginUser="fedora"; HostType="Fedora" ;;
-    centos*)  LoginUser="centos"; HostType="Centos" ;;
-    openBSD*) LoginUser="root"; HostType="openBSD" ;;
+    debian*)  LoginUser="admin";    HostType="Debian" ;;
+    febora*)  LoginUser="fedora";   HostType="Fedora" ;;
+    centos*)  LoginUser="centos";   HostType="Centos" ;;
+    openBSD*) LoginUser="root";     HostType="openBSD" ;;
     *)        LoginUser="ec2-user"; HostType="undetermined-default" ;;
   esac
   [[ "$debugmode" ]] && echo -e "HostType: \t${CLRtitle}${HostType}${CLRnormal}\t LoginUser: ${CLRtitle}${LoginUser}${CLRnormal}\n"
@@ -71,7 +72,6 @@ DetermineLoginUser() {
 [[ ${1:0:1} == "-" ]] && echo -e "${CLRerror}Error:${CLRnormal} Instance Name not specified\n" && display_help_text
 
 InstanceName="$1"
-
 shift
 
 # Parse COMMAND-TAIL Arguments
@@ -79,22 +79,63 @@ for arg in "$@"; do
   case "$arg" in
     -u)       UserLoginName="$2"; shift; shift ;;
     -n)       nopem=true; shift ;;
-    # -h)       display_help_text ;;
-    # -v)       display_ver; exit ;;
     -d)       debugmode=true; shift ;;
   esac
 done
 
-# Retrieve Public DNS Name, and Key assigned to instance
-InstanceInfo=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=$InstanceName" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[KeyName,PublicDnsName]' --output text))
-InstanceKey=${InstanceInfo[0]}
-InstanceAddy=${InstanceInfo[1]}
+# Retrieve Instance Info, including Public DNS Name and Key
+InstanceData=($(aws ec2 describe-instances --filters "Name=tag:Name,Values=$InstanceName" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[].[InstanceId,ImageId,KeyName,PublicDnsName,Tags[?Key==`Name`].Value]' --output text))
+numberDataRecords=5
 
-[[ "$debugmode" ]] && echo -e "Address: \t${CLRtitle}${InstanceAddy}${CLRnormal}"
-[[ "$debugmode" ]] && [[ ! "$nopem" ]] && echo -e "Key (PEM): \t${CLRtitle}${InstanceKey}${CLRnormal}"
+numInstancesFound=${#InstanceData[@]}
+numInstancesFound=$((numInstancesFound/numberDataRecords))
+[[ "$debugmode" ]] && echo -e "numInstancesFound: \t${numInstancesFound}"
+
+if (( numInstancesFound > 1 )); then
+  counter=0
+  echo -e "$numInstancesFound instances match this query:\n"
+  for (( j=0; j<${#InstanceData[@]}; j=j+numberDataRecords )); do
+    (( counter++ ))
+    InstanceId[counter]=${InstanceData[$j]}
+    ImageAMI[counter]=${InstanceData[$j+1]}
+    InstanceKey[counter]=${InstanceData[$j+2]}
+    InstanceAddy[counter]=${InstanceData[$j+3]}
+    # InstanceName[counter]=${InstanceData[$j+4]}
+    ImageDescription[counter]=$(aws ec2 describe-images --image-ids "${InstanceData[$j+1]}" --query 'Images[*].{Name:Name}' --output text)
+    echo -e "Instance ${CLRwarning}#${counter}${CLRnormal}"
+    echo -e "\t${CLRnormal}Name: ${CLRtitle}${InstanceData[$j+4]}${CLRnormal}\t\tID: ${CLRtitle}${InstanceData[$j]}${CLRnormal}\n\tAMI: ${CLRtitle}${InstanceData[$j+1]}${CLRnormal}\tAMI Name: ${CLRtitle}${ImageDescription[counter]}${CLRnormal}"
+    echo
+  done
+  while [[ ! $selectionValid ]]; do
+    echo -en "Enter ${CLRwarning}#${CLRnormal} of instance to connect via ssh (1-$numInstancesFound): "
+    read -r -n 1 SELECTION
+    if [[ $SELECTION =~ ^[1-$numInstancesFound]$ ]]; then
+      echo -e "\n"
+      selectionValid=true
+    else
+      echo -e "\n${CLRerror}Invalid entry:${CLRnormal} enter a number between 1 and $numInstancesFound.\n"
+    fi
+  done
+  echo -e "Connecting to InstanceId: \t${CLRtitle}${InstanceId[$SELECTION]}${CLRnormal}\n"
+else  # only one instance matches query - set default values
+  SELECTION=0
+  InstanceId[0]=${InstanceData[0]}
+  ImageAMI[0]=${InstanceData[1]}
+  InstanceKey[0]=${InstanceData[2]}
+  InstanceAddy[0]=${InstanceData[3]}
+fi
+
+if [[ "$debugmode" ]]; then
+  echo -e "SELECTION: \t${CLRtitle}$SELECTION${CLRnormal}"
+  echo -e "InstanceId: \t${CLRtitle}${InstanceId[$SELECTION]}${CLRnormal}"
+  echo -e "ImageAMI: \t${CLRtitle}${ImageAMI[$SELECTION]}${CLRnormal}"
+  echo -e "InstanceKey: \t${CLRtitle}${InstanceKey[$SELECTION]}${CLRnormal}"
+  echo -e "InstanceAddy:\t${CLRtitle}${InstanceAddy[$SELECTION]}${CLRnormal}"
+  [[ ! "$nopem" ]] && echo -e "Key (PEM): \t${CLRtitle}${InstanceKey[$SELECTION]}${CLRnormal}"
+fi
 
 # Unable to retrieve Public DNS Name for host - likely offline
-if [ -z "$InstanceAddy" ]; then
+if [ -z "${InstanceAddy[$SELECTION]}" ]; then
   echo -e "Instance not found - possibly offline?"
   exit 1
 fi
@@ -108,12 +149,12 @@ fi
 
 if [[ "$nopem" ]]; then
   [[ ! "$debugmode" ]] && echo -e "${CLRheading2}No PEM mode${CLRnormal} - connecting without PEM key\n"
-  [[ "$debugmode" ]] && echo -e "${CLRheading2}No PEM mode${CLRnormal}  Connect string: ${CLRtitle}ssh ${LoginUser}@${InstanceAddy}${CLRnormal}\n"
-  ssh "${LoginUser}@${InstanceAddy}"
+  [[ "$debugmode" ]] && echo -e "${CLRheading2}No PEM mode${CLRnormal}  Connect string: ${CLRtitle}ssh ${LoginUser}@${InstanceAddy[$SELECTION]}${CLRnormal}\n"
+  ssh "${LoginUser}@${InstanceAddy[$SELECTION]}"
   exit 0
 else
-  [[ "$debugmode" ]] && echo -e "Connect string: ${CLRtitle}ssh -i ${HOME}/.aws/${InstanceKey}.pem ${LoginUser}@${InstanceAddy}${CLRnormal}\n"
-  ssh -i "${HOME}/.aws/${InstanceKey}.pem" "${LoginUser}@${InstanceAddy}"
+  [[ "$debugmode" ]] && echo -e "Connect string: ${CLRtitle}ssh -i ${HOME}/.aws/${InstanceKey[$SELECTION]}.pem ${LoginUser}@${InstanceAddy[$SELECTION]}${CLRnormal}\n"
+  ssh -i "${HOME}/.aws/${InstanceKey[$SELECTION]}.pem" "${LoginUser}@${InstanceAddy[$SELECTION]}"
   exit 0
 fi
 exit 0
