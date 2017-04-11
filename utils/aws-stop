@@ -11,10 +11,10 @@
 scriptname="aws-stop"
 
 # call aws-toggle utility with start action
-if [[ -e "aws-toggle" ]]; then
-  ./aws-toggle stop "$@"
+if [[ $(which aws-toggle) ]]; then
+  aws-toggle stop "$@"
 else
-  echo "Error - required init files not found"
+  echo "Error - required utility (aws-toggle) not found"
   exit 1
 fi
 

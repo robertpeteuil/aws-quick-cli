@@ -13,10 +13,10 @@ scriptbuildnum="1.0.0"
 scriptbuilddate="2017-04-11"
 
 # source aws-quick-cli init files to add color and display_ver function
-if [[ -e "aws-quick-cli-init.sh" ]]; then
+if [[ $(which aws-quick-cli-init.sh) ]]; then
   . aws-quick-cli-init.sh
 else
-  echo "Error - required init files not found"
+  echo "Error - required init file not found"
   exit 1
 fi
 
@@ -59,7 +59,7 @@ elif [[ "$1" == "stop" ]]; then
   warningMessage1="started"
   warningMessage2="stopped"
 else
-  echo "${CLRerror}This script intended to be called from aws-start or aws-stop only"
+  echo "${CLRerror}This script can only be called from aws-start or aws-stop"
   exit 1
 fi
 shift
