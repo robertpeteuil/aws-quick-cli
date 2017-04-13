@@ -9,15 +9,34 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="1.0.0"
-scriptbuilddate="2017-04-11"
+scriptbuildnum="1.0.0.1"
+scriptbuilddate="2017-04-13"
 
 # source aws-quick-cli init files to add color and display_ver function
-if [[ $(which aws-quick-cli-init.sh) ]]; then
-  . aws-quick-cli-init.sh
+# if [[ -e "aws-quick-cli-init.sh" ]]; then
+#   . aws-quick-cli-init.sh
+# else
+#   echo "Error - required init file not found"
+#   exit 1
+# fi
+
+# workingDir="$PWD"
+scriptDir=$(reldir=$(dirname -- "$0"; echo x); reldir=${reldir%?x}; cd -- "$reldir" && pwd && echo x); scriptDir=${scriptDir%?x}
+
+# echo "workingDir = $workingDir"
+# echo "scriptDir = $scriptDir"
+
+if [[ -d "$scriptDir" ]]; then
+  cd "$scriptDir" || { echo >&2 "Cannot cd to utility dir"; exit 1; }
+  # echo "CD'd into $scriptDir"
+  if [[ ! -e "aws-quick-cli-init.sh" ]]; then
+    echo "Cannot find initfile in $scriptDir."; exit 1
+  else
+    # echo "initfile in $scriptDir - running it"
+    . aws-quick-cli-init.sh
+  fi
 else
-  echo "Error - required init file not found"
-  exit 1
+  echo "Cannot find initfile, $scriptDir doesnt exist."; exit 1
 fi
 
 ############################################################
