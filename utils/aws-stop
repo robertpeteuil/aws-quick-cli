@@ -10,12 +10,17 @@
 
 scriptname="aws-stop"
 
-# call aws-toggle utility with start action
-if [[ $(which aws-toggle) ]]; then
-  aws-toggle stop "$@"
+scriptDir=$(reldir=$(dirname -- "$0"; echo x); reldir=${reldir%?x}; cd -- "$reldir" && pwd && echo x); scriptDir=${scriptDir%?x}
+
+if [[ -d "$scriptDir" ]]; then
+  cd "$scriptDir" || { echo >&2 "Cannot cd to utility dir"; exit 1; }
+  if [[ ! -e "aws-toggle" ]]; then
+    echo "Cannot find 'aws-toggle' in $scriptDir."; exit 1
+  else
+    ./aws-toggle stop "$@"
+  fi
 else
-  echo "Error - required utility (aws-toggle) not found"
-  exit 1
+    echo "Cannot find subcommand 'aws-toggle', $scriptDir doesnt exist."; exit 1
 fi
 
 exit 0
