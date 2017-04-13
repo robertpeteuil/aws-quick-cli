@@ -9,16 +9,8 @@
 #
 
 scriptname="aws-toggle"
-scriptbuildnum="1.0.0"
-scriptbuilddate="2017-04-11"
-
-# source aws-quick-cli init files to add color and display_ver function
-if [[ $(which aws-quick-cli-init.sh) ]]; then
-  . aws-quick-cli-init.sh
-else
-  echo "Error - required init file not found"
-  exit 1
-fi
+scriptbuildnum="1.0.0.1"
+scriptbuilddate="2017-04-13"
 
 ############################################################
 ###   FUNCTIONS
@@ -59,10 +51,19 @@ elif [[ "$1" == "stop" ]]; then
   warningMessage1="started"
   warningMessage2="stopped"
 else
-  echo "${CLRerror}This script can only be called from aws-start or aws-stop"
+  echo "This script can only be called from aws-start or aws-stop"
   exit 1
 fi
 shift
+
+# source aws-quick-cli init files to add color and display_ver function
+if [[ -e "aws-quick-cli-init.sh" ]]; then
+  . aws-quick-cli-init.sh
+else
+  echo "Error - required init file not found"
+  exit 1
+fi
+
 
 [[ "$1" == "-h" ]] && display_help_text
 [[ "$1" == "-v" ]] && display_ver && exit
