@@ -10,12 +10,37 @@
 
 scriptname="aws-start"
 
-# call aws-toggle utility with start action
-if [[ $(which aws-toggle) ]]; then
-  aws-toggle start "$@"
+# workingDir="$PWD"
+scriptDir=$(reldir=$(dirname -- "$0"; echo x); reldir=${reldir%?x}; cd -- "$reldir" && pwd && echo x); scriptDir=${scriptDir%?x}
+# altMethod=$(readlink -f "$0")
+
+# echo "workingDir = $workingDir"
+# echo "scriptDir = $scriptDir"
+
+if [[ -d "$scriptDir" ]]; then
+  cd "$scriptDir" || { echo >&2 "Cannot cd to utility dir"; exit 1; }
+  # cdflag=true
+  # echo "CD'd into $scriptDir"
+  if [[ ! -e "aws-toggle" ]]; then
+    echo "Cannot find 'aws-toggle' in $scriptDir."; exit 1
+  else
+    # echo "aws-toggle in $scriptDir - running it"
+    ./aws-toggle start "$@"
+  fi
 else
-  echo "Error - required utility (aws-toggle) not found"
-  exit 1
+  echo "Cannot find 'aws-toggle', $scriptDir doesnt exist."; exit 1
 fi
 
+# [[ $cdflag ]] && cd "$workingDir" && echo "CD'd back to original working dir"
+
 exit 0
+
+# # call aws-toggle utility with start action
+# if [[ $(which aws-toggle) ]]; then
+#   aws-toggle start "$@"
+# else
+#   echo "Error - required utility (aws-toggle) not found"
+#   exit 1
+# fi
+#
+# exit 0
