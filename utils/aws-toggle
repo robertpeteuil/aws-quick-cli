@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-toggle"
-scriptbuildnum="1.0.1"
+scriptbuildnum="1.0.1a"
 scriptbuilddate="2017-04-13"
 
 ############################################################
@@ -22,10 +22,11 @@ display_help_text() {
   echo
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-v] [-h]${CLRnormal}"
   echo
-  echo -e "${CLRtitle}\tOPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2} instance-name\t${CLRnormal}: (REQUIRED) name tag assigned to the EC2 instance"
+  echo -e "\n${CLRtitle}\tOPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2}            -v\t${CLRnormal}: display version info"
   echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
+  echo 
   exit 0
 }
 

@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-ssh"
-scriptbuildnum="1.0.1"
+scriptbuildnum="1.0.1a"
 scriptbuilddate="2017-04-13"
 
 # source aws-quick-cli init files to add color and display_ver function
@@ -35,8 +35,8 @@ display_help_text() {
   echo -e "${CLRtitle}connects to a name-specified AWS EC2 instance via ssh"
   echo
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}instance-name [-n] [-u login-user] [-d] [-v] [-h]${CLRnormal}\n"
-  echo -e "${CLRtitle}\tOPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2} instance-name\t${CLRnormal}: (REQUIRED) name tag assigned to the EC2 instance"
+  echo -e "\n${CLRtitle}\t OPTIONS:${CLRnormal}"
   echo -e "${CLRtitle2} -u login-user\t${CLRnormal}: (optional) manually specify a login-username for ssh"
   echo -e "${CLRtitle2}            -n\t${CLRnormal}: Don't use PEM key while connecting ${CLRsuccess}*${CLRnormal}"
   echo -e "${CLRtitle2}            -d\t${CLRnormal}: debug mode"

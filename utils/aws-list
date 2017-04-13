@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="1.0.1"
+scriptbuildnum="1.0.1a"
 scriptbuilddate="2017-04-13"
 
 # source aws-quick-cli init files to add color and display_ver function
@@ -42,15 +42,15 @@ display_help_text() {
   echo -e "${CLRtitle}list status and information for AWS EC2 instances"
   echo
   echo -e "${CLRtitle}USAGE: ${CLRnormal}${scriptname} ${CLRtitle2}(none)${CLRnormal}|${CLRtitle2} instance-name ${CLRnormal}| ${CLRtitle2}-s ${CLRnormal}|${CLRtitle2} -r ${CLRnormal} [OPTIONS]\n"
-  echo -e "${CLRtitle}SELECT LIST TYPE:${CLRnormal}"
-  echo -e "${CLRtitle2}       (none)\t${CLRnormal}: list all instances"
-  echo -e "${CLRtitle2}instance-name\t${CLRnormal}: info for a specific instance"
-  echo -e "${CLRtitle2}           -s\t${CLRnormal}: list stopped instances"
-  echo -e "${CLRtitle2}           -r\t${CLRnormal}: list running instances"
-  echo -e "${CLRtitle}\t OPTIONS:${CLRnormal}"
-  echo -e "${CLRtitle2}           -d\t${CLRnormal}: debug mode"
-  echo -e "${CLRtitle2}           -v\t${CLRnormal}: display version info"
-  echo -e "${CLRtitle2}           -h\t${CLRnormal}: display help info"
+  echo -e "${CLRtitle}       LIST TYPE:${CLRnormal}"
+  echo -e "${CLRtitle2}        (none)\t${CLRnormal}: list all instances"
+  echo -e "${CLRtitle2} instance-name\t${CLRnormal}: list instances with the specified name"
+  echo -e "${CLRtitle2}            -s\t${CLRnormal}: list all stopped instances"
+  echo -e "${CLRtitle2}            -r\t${CLRnormal}: list all running instances"
+  echo -e "\n${CLRtitle}\t OPTIONS:${CLRnormal}"
+  echo -e "${CLRtitle2}            -d\t${CLRnormal}: debug mode"
+  echo -e "${CLRtitle2}            -v\t${CLRnormal}: display version info"
+  echo -e "${CLRtitle2}            -h\t${CLRnormal}: display help info"
   echo
   exit 0
 }

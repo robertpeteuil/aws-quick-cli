@@ -68,7 +68,7 @@ USAGE: aws-ssh instance-name [-n] [-u login-user] [-d] [-v] [-h]
 
  instance-name	: (REQUIRED) name tag assigned to instance
 
-        OPTIONS:
+           OPTIONS:
  -u login-user	: (optional) specify a login-username
             -n	: Dont use PEM key while connecting *
             -d	: debug mode
@@ -83,16 +83,16 @@ USAGE: aws-ssh instance-name [-n] [-u login-user] [-d] [-v] [-h]
 ```text
 USAGE: aws-list (none)| instance-name | -s | -r  [OPTIONS]
 
-SELECT LIST TYPE:
-       (none)	: list all instances
-instance-name	: info for a specific instance
-           -s	: list stopped instances
-           -r	: list running instances
+         LIST TYPE:
+        (none)	: list all instances
+ instance-name	: info for a specific instance
+            -s	: list stopped instances
+            -r	: list running instances
 
-        OPTIONS:
-           -d	: debug mode
-           -v	: display version info
-           -h	: display help info
+           OPTIONS:
+            -d	: debug mode
+            -v	: display version info
+            -h	: display help info
 ```
 
 **aws-start** - STARTS the specified AWS EC2 instance
@@ -100,8 +100,9 @@ instance-name	: info for a specific instance
 ```text
 USAGE: aws-start instance-name [-v] [-h]
 
-        OPTIONS:
- instance-name	: (REQUIRED) name tag assigned to instance
+  instance-name	: (REQUIRED) name tag assigned to instance
+
+           OPTIONS:
             -v	: display version info
             -h	: display help info
 ```
@@ -111,8 +112,9 @@ USAGE: aws-start instance-name [-v] [-h]
 ```text
 USAGE: aws-stop instance-name [-v] [-h]
 
-        OPTIONS:
- instance-name	: (REQUIRED) name tag assigned to instance
+  instance-name	: (REQUIRED) name tag assigned to instance
+
+           OPTIONS:
             -v	: display version info
             -h	: display help info
 ```
