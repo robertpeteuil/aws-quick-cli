@@ -9,7 +9,7 @@
 #
 
 scriptname="aws-toggle"
-scriptbuildnum="1.0.0.1"
+scriptbuildnum="1.0.1"
 scriptbuilddate="2017-04-13"
 
 ############################################################
