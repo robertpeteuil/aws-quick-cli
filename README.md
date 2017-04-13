@@ -68,7 +68,7 @@ USAGE: aws-ssh instance-name [-n] [-u login-user] [-d] [-v] [-h]
 
  instance-name	: (REQUIRED) name tag assigned to instance
 
-           OPTIONS:
+         OPTIONS:
  -u login-user	: (optional) specify a login-username
             -n	: Dont use PEM key while connecting *
             -d	: debug mode
@@ -83,13 +83,13 @@ USAGE: aws-ssh instance-name [-n] [-u login-user] [-d] [-v] [-h]
 ```text
 USAGE: aws-list (none)| instance-name | -s | -r  [OPTIONS]
 
-         LIST TYPE:
+       LIST TYPE:
         (none)	: list all instances
  instance-name	: info for a specific instance
             -s	: list stopped instances
             -r	: list running instances
 
-           OPTIONS:
+         OPTIONS:
             -d	: debug mode
             -v	: display version info
             -h	: display help info
@@ -102,7 +102,7 @@ USAGE: aws-start instance-name [-v] [-h]
 
   instance-name	: (REQUIRED) name tag assigned to instance
 
-           OPTIONS:
+         OPTIONS:
             -v	: display version info
             -h	: display help info
 ```
@@ -114,7 +114,7 @@ USAGE: aws-stop instance-name [-v] [-h]
 
   instance-name	: (REQUIRED) name tag assigned to instance
 
-           OPTIONS:
+         OPTIONS:
             -v	: display version info
             -h	: display help info
 ```
@@ -123,9 +123,9 @@ USAGE: aws-stop instance-name [-v] [-h]
 
 AWS-CLI Installation Pre-Requisites:
 - Installation requires Python 2 version 2.6.5+ or Python 3 version 3.3+
-- Installation requires the `unzip` command, which can be installed by typing `sudo apt install unzip`
+- Installation requires the `unzip` command, which can be installed by typing `sudo apt-get install unzip`
 - **Do not install the AWS CLI via a package manager** - this usually installs an outdated version which will not work with these utilities.
-- Check here for detailed installation instructions on the [AWS Website](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+- For help or more detailed instruction go to the [AWS Website](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
 #### Installation commands for those with `sudo` capabilities:
 
