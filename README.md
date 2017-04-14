@@ -44,19 +44,19 @@ Utilities are included for:
   - **Do not install the AWS CLI via a package manager** - this usually installs an outdated version which will not work with these utilities.
 - Instructions for installing the AWS-CLI utilities are included at the bottom of this README in the section *Reference - Installation of AWS-CLI* and or on the [AWS Website](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
 
-### Installation:
+## Installation:
 
 The utilities in the repo can be installed with curl
 
 ```shell
-$ bash -c "`curl -s -L https://raw.github.com/robertpeteuil/aws-quick-cli/master/install.sh`"
+bash -c "`curl -s -L https://raw.github.com/robertpeteuil/aws-quick-cli/master/install.sh`"
 ```
 
 If the repo has been downloaded locally, cd into the directory and run install.sh
 
 ```shell
-$ cd aws-quick-cli
-$ ./install.sh
+cd aws-quick-cli
+./install.sh
 ```
 
 ### Reference: Utility Details
@@ -122,6 +122,7 @@ USAGE: aws-stop instance-name [-v] [-h]
 ### Reference - Installation of AWS-CLI
 
 AWS-CLI Installation Pre-Requisites:
+
 - Installation requires Python 2 version 2.6.5+ or Python 3 version 3.3+
 - Installation requires the `unzip` command, which can be installed by typing `sudo apt-get install unzip`
 - **Do not install the AWS CLI via a package manager** - this usually installs an outdated version which will not work with these utilities.
