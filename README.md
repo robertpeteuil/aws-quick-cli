@@ -1,6 +1,6 @@
-# AWS quick CLI
+# AWS Quick CLI
 ### Easily control and ssh to AWS instances using their Name
-[![Code Climate](https://codeclimate.com/github/robertpeteuil/aws-quick-cli/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/robertpeteuil/aws-quick-cli)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a7b3d53ab89a4b758766c238173175cc)](https://www.codacy.com/app/robertpeteuil/aws-quick-cli?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=robertpeteuil/aws-quick-cli&amp;utm_campaign=Badge_Grade)
 [![GitHub issues](https://img.shields.io/github/issues/robertpeteuil/aws-quick-cli.svg)](https://github.com/robertpeteuil/aws-quick-cli)
 [![GitHub release](https://img.shields.io/github/release/robertpeteuil/aws-quick-cli.svg?colorB=1c64bf)](https://github.com/robertpeteuil/aws-quick-cli)
 [![lang](https://img.shields.io/badge/language-bash-89e051.svg?style=flat-square)]()
@@ -8,29 +8,54 @@
 
 ---
 
-These utilities allow you to easily manage and connect to AWS instances using their name.  It allows for listing, connecting via ssh, and starting/stopping instances.
+AWS Quick CLI allows listing, starting, stopping and connecting to instances by name or instance-id.
 
-If multiple instances have the same NAME, details for matching instances are listed and the user asked to choose the intended instance.  For example, running `aws-start Ubuntu` when there are multiple instance named Ubuntu.
-
-### Screenshot of aws-list:
+### Example of `aws-list` sub-utility:
 ![](https://cloud.githubusercontent.com/assets/1554603/24174034/db095af6-0e4b-11e7-8e66-fdfa1d8eecae.png)
 
 ### Overview:
 
-The utilities are executed by typing the utility name followed by the instance-name. ex: `aws-ssh NAME` and `aws-start NAME`  
+This utility suite consists of four utilities: `aws-list`, `aws-start`, `aws-stop`, and `aws-ssh`.
 
-Utilities are included for:
+- SSH to an Instance: `aws-ssh NAME` or `aws-ssh -i ID`
 
-- SSH to an Instance: **aws-ssh**
-  - automatically calculates the ssh login-name based upon the instance image-type
-  - optionally over-ride the calculated login-name
-  - optionally connect without PEM keys (if properly configured)
-- List Instances: **aws-list**
-  - list all instance
-  - optionally list all running/stopped instances,
-  - optionally list instances with a specified name
-- Start Instance: **aws-start**
-- Stop Instance: **aws-stop**
+  - Additional parameters described in Details
+
+- List Instances: `aws-list`
+
+  - Additional parameters described in Details
+
+- Start Instance: `aws-start NAME` or `aws-start -i ID`
+- Stop Instance: `aws-stop NAME` or `aws-stop -i ID`
+
+### Details
+
+- SSH to Instance: `aws-ssh NAME` or `aws-ssh -i ID`
+
+  - automatically calculates login-name based on the image-type of the instance
+  - override the calculated login-name `-u USERNAME`
+  - connect without PEM keys (if properly configured) `-p`
+  - command specific help `aws-ssh -h`
+
+- List Instances: `aws-list`
+
+  - list all instances (default).
+  - list running instances `-r` or `--running`
+  - list stopped instances `-s` or `--stopped`
+  - list instances with specified name `aws-list NAME`
+  - list instance with specified instance-id `aws-list -i ID`
+  - command specific help `aws-list -h`
+
+- Start Instance: `aws-start NAME` or `aws-start -i ID`
+
+  - start instance by name or instance-id
+  - command specific help `aws-start -h`
+
+- Stop Instance: `aws-stop NAME` or `aws-stop -i ID`
+
+  - start instance by name or instance-id
+  - command specific help `aws-stop -h`
+
 
 ### Supported Platforms:
 
@@ -40,7 +65,7 @@ Utilities are included for:
 
 ### Pre-Requisites:
 
-- The AWS CLI utilities must installed and configured on the system
+- The AWS CLI utilities must installed and configured
   - **Do not install the AWS CLI via a package manager** - this usually installs an outdated version which will not work with these utilities.
 - Instructions for installing the AWS-CLI utilities are included at the bottom of this README in the section *Reference - Installation of AWS-CLI* and or on the [AWS Website](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
 
@@ -59,76 +84,16 @@ cd aws-quick-cli
 ./install.sh
 ```
 
-### Reference: Utility Details
-
-**aws-ssh** - connects to a name-specified AWS EC2 instance via ssh
-
-```text
-USAGE: aws-ssh instance-name [-n] [-u login-user] [-d] [-v] [-h]
-
- instance-name	: (REQUIRED) name tag assigned to instance
-
-         OPTIONS:
- -u login-user	: (optional) specify a login-username
-            -n	: Dont use PEM key while connecting *
-            -d	: debug mode
-            -v	: display version info
-            -h	: display help info
-
-* Note: for users who have appended their ssh-rsa.pub key to 'authorized_keys' on the remote host
-```
-
-**aws-list** - list status and information for AWS EC2 instances
-
-```text
-USAGE: aws-list (none)| instance-name | -s | -r  [OPTIONS]
-
-       LIST TYPE:
-        (none)	: list all instances
- instance-name	: info for a specific instance
-            -s	: list stopped instances
-            -r	: list running instances
-
-         OPTIONS:
-            -d	: debug mode
-            -v	: display version info
-            -h	: display help info
-```
-
-**aws-start** - STARTS the specified AWS EC2 instance
-
-```text
-USAGE: aws-start instance-name [-v] [-h]
-
-  instance-name	: (REQUIRED) name tag assigned to instance
-
-         OPTIONS:
-            -v	: display version info
-            -h	: display help info
-```
-
-**aws-stop** - STOPS the specified AWS EC2 instance
-
-```text
-USAGE: aws-stop instance-name [-v] [-h]
-
-  instance-name	: (REQUIRED) name tag assigned to instance
-
-         OPTIONS:
-            -v	: display version info
-            -h	: display help info
-```
-
 ### Reference - Installation of AWS-CLI
 
-AWS-CLI Installation Pre-Requisites:
+##### Pre-Requisites:
 
 - Installation requires Python 2 version 2.6.5+ or Python 3 version 3.3+
 - Installation requires the `unzip` command, which can be installed by typing `sudo apt-get install unzip`
-- **Do not install the AWS CLI via a package manager** - this usually installs an outdated version which will not work with these utilities.
-- For help or more detailed instruction go to the [AWS Website](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+- **Do not install the AWS CLI via a package manager** - this may install an outdated version that's incompatible with these utilities.
+- For help or additional instruction see the [AWS Website](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
-#### Installation commands for those with `sudo` capabilities:
+#### Installation with `sudo` capabilities:
 
 ```shell
 $ cd ~
@@ -141,7 +106,7 @@ $ cd ..
 $ rm -rf tmpawsinstall
 ```
 
-#### Installation commands for users without `sudo` capabilities:
+#### Installation without `sudo` capabilities:
 
 ```shell
 $ cd ~
@@ -154,7 +119,7 @@ $ cd ..
 $ rm -rf tmpawsinstall
 ```
 
-Additional non-sudo installation steps:
+Additional steps for non-sudo installations:
 
 - manually add the `~/bin` directory to your PATH
 - This is performed by editing your shell profile
