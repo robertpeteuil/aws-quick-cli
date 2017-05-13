@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="1.0.1a"
-scriptbuilddate="2017-04-13"
+scriptbuildnum="1.0.2"
+scriptbuilddate="2017-05-12"
 
 # source aws-quick-cli init files to add color and display_ver function
 scriptDir=$(reldir=$(dirname -- "$0"; echo x); reldir=${reldir%?x}; cd -- "$reldir" && pwd && echo x); scriptDir=${scriptDir%?x}
@@ -105,7 +105,7 @@ if [ ${#InstanceData[@]} -ne 0 ]; then
     InstanceStatus=${InstanceData[$j+2]}
     InstanceName=${InstanceData[$j+3]}
 
-    ImageDescription=($(aws ec2 describe-images --image-ids "${ImageAMI}" --query 'Images[*].{Name:Name}' --output text))
+    ImageDescription=$(aws ec2 describe-images --image-ids "${ImageAMI}" --query 'Images[*].{Name:Name}' --output text)
 
     case ${InstanceStatus} in
       running)    CLRstatus=${CLRsuccess} ;;
@@ -116,7 +116,7 @@ if [ ${#InstanceData[@]} -ne 0 ]; then
       *)          CLRstatus=${CLRnormal} ;;
     esac
     echo -e "\t${CLRnormal}Name: ${CLRtitle}${InstanceName}${CLRnormal}\t\tID: ${CLRtitle}${InstanceId}${CLRnormal}\t\tStatus: ${CLRstatus}${InstanceStatus}"
-    echo -e "\t${CLRnormal}AMI: ${CLRtitle}${ImageAMI}${CLRnormal}\t${CLRnormal}AMI Name: ${CLRtitle}${ImageDescription[0]}${CLRnormal}\n"
+    echo -e "\t${CLRnormal}AMI: ${CLRtitle}${ImageAMI}${CLRnormal}\t${CLRnormal}AMI Name: ${CLRtitle}${ImageDescription:0:45}${CLRnormal}\n"
   done
 
 else

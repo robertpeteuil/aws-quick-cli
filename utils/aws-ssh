@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-ssh"
-scriptbuildnum="1.0.1a"
-scriptbuilddate="2017-04-13"
+scriptbuildnum="1.0.2"
+scriptbuilddate="2017-05-12"
 
 # source aws-quick-cli init files to add color and display_ver function
 scriptDir=$(reldir=$(dirname -- "$0"; echo x); reldir=${reldir%?x}; cd -- "$reldir" && pwd && echo x); scriptDir=${scriptDir%?x}
