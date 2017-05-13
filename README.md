@@ -3,7 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a7b3d53ab89a4b758766c238173175cc)](https://www.codacy.com/app/robertpeteuil/aws-quick-cli?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=robertpeteuil/aws-quick-cli&amp;utm_campaign=Badge_Grade)
 [![GitHub issues](https://img.shields.io/github/issues/robertpeteuil/aws-quick-cli.svg)](https://github.com/robertpeteuil/aws-quick-cli)
 [![GitHub release](https://img.shields.io/github/release/robertpeteuil/aws-quick-cli.svg?colorB=1c64bf)](https://github.com/robertpeteuil/aws-quick-cli)
-[![lang](https://img.shields.io/badge/language-bash-89e051.svg?style=flat-square)]()
+[![lang](https://img.shields.io/badge/language-bash-89e051.svg?style=flat-square)](https://github.com/robertpeteuil/aws-quick-cli)
 [![license](https://img.shields.io/github/license/robertpeteuil/aws-quick-cli.svg?colorB=1c64bf)](https://github.com/robertpeteuil/aws-quick-cli)
 
 ---
