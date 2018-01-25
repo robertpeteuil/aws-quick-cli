@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-toggle"
-scriptbuildnum="1.0.2"
-scriptbuilddate="2017-05-12"
+scriptbuildnum="1.0.3"
+scriptbuilddate="2018-01-25"
 
 ############################################################
 ###   FUNCTIONS

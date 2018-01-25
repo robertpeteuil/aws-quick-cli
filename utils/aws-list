@@ -9,8 +9,8 @@
 #
 
 scriptname="aws-list"
-scriptbuildnum="1.0.2"
-scriptbuilddate="2017-05-12"
+scriptbuildnum="1.0.3"
+scriptbuilddate="2018-01-25"
 
 # source aws-quick-cli init files to add color and display_ver function
 scriptDir=$(reldir=$(dirname -- "$0"; echo x); reldir=${reldir%?x}; cd -- "$reldir" && pwd && echo x); scriptDir=${scriptDir%?x}

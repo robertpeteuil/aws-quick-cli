@@ -27,8 +27,9 @@ if test -t 1; then            # check if stdout is a terminal
     magenta="$(tput setaf 5)"     # shellcheck disable=SC2034
     cyan="$(tput setaf 6)"
     white="$(tput setaf 7)"
+    clrreset="\033[0m"
   # Set Color Theme - used by echo statements
-    CLRnormal=${bold}${white}
+    CLRnormal=${bold}${clrreset}
     CLRheading=${bold}${green}
     CLRheading2=${bold}${blue}    # shellcheck disable=SC2034
     CLRtitle=${bold}${cyan}
